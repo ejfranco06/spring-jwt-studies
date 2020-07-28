@@ -26,7 +26,7 @@ public class TestController {
     @GetMapping("/user")
     public String getUser(@RequestBody Map map){
         String userName = (String) map.get("userName");
-        AppUser user= userRepository.findByUserName(userName);
-        return user != null? "user found" : " no such user";
+//        AppUser user= userRepository.findByUserName(userName).orElse(() ->" no such user" );
+        return userName != null? "user found " + userName : " no such user";
     }
 }

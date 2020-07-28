@@ -2,6 +2,7 @@ package dev.emiliofranco.springjwtstudies.repository;
 
 import dev.emiliofranco.springjwtstudies.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -37,17 +39,13 @@ public class UserRepository {
         }
     }
 
-    public AppUser findByUserName(String userName){
+    public Optional<AppUser> findByUserName(String userName){
         try {
             MapSqlParameterSource paramMap = new MapSqlParameterSource();
             paramMap.addValue("userName", userName);
-
             AppUser user =  jdbcTemplate.queryForObject(SQL_FIND_BY_USER_NAME, paramMap, new AppUserMapper());
-
-            return user;
-
-        } catch (Exception e){
-            //Todo: Throw an Exception
+            return Optional.ofNullable(user);
+        } catch (EmptyResultDataAccessException e){
             return null;
         }
     }
